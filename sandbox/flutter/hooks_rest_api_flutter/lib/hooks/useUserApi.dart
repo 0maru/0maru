@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+// https://swapi.dev/api/people/1/
 AsyncSnapshot<String?> useUserApi<String>([String? initialData]) {
   final result = useState<String?>(initialData);
   final future = useFuture<String?>(

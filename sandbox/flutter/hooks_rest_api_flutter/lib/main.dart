@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_rest_api_flutter/hooks/useUserApi.dart';
+import 'package:hooks_rest_api_flutter/client.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
@@ -27,8 +27,6 @@ class MyHomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = useUserApi('test');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -37,7 +35,19 @@ class MyHomePage extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('${data.data}'),
+            TextButton(
+              child: Text('run'),
+              onPressed: () {
+                final client = Client()
+                  ..addInterceptor(() {
+                    debugPrint('interceptor 1');
+                  })
+                  ..addInterceptor(() {
+                    debugPrint('interceptor ');
+                  });
+                client.run();
+              },
+            ),
           ],
         ),
       ),
