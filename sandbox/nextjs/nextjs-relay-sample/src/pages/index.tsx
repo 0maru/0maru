@@ -1,41 +1,49 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
-import fetchGraphQL from '../lib/fetchGraphql'
+import { Suspense, useEffect } from 'react'
+import { PreloadedQuery, useClientQuery, usePreloadedQuery, useQueryLoader } from 'react-relay'
+import indexPageQueryGraphql, {
+  indexPageQuery
+} from '../queries/__generated__/indexPageQuery.graphql'
 
-
-const Home : NextPage = () => {
-  const [name, setName] = useState(null)
+const Index : NextPage = () => {
+  const data = useClientQuery<indexPageQuery>(indexPageQueryGraphql, {})
+  const [queryReference, loadQuery] = useQueryLoader<indexPageQuery>(indexPageQueryGraphql)
 
   useEffect(() => {
-    let mounted = true
-    fetchGraphQL(`
-      query RepositoryNameQuery {
-        repository(owner: "0maru", name: "0maru") {
-          name
-        }
-      }
-    `).then((response : any) => {
-      if (!mounted) {
-        return
-      }
-      const data = response.data
-      setName(data.repository.name)
-    }).catch((e : any) => {
-      console.error(e)
-    })
-
-    return () => {
-      mounted = false
-    }
+    loadQuery({})
   }, [])
 
   return (
     <div>
-      <p>
-        {name != null ? `Repository: ${name}` : 'Loading'}
-      </p>
+      <p>useClientQuery</p>
+      <p>{data.repository?.name}</p>
+      <p>{data.repository?.description}</p>
+      <p>{data.repository?.owner.login}</p>
+      <Suspense fallback={<p>loading...</p>}>
+        {queryReference ? <Component queryReference={queryReference} /> : <p>loading</p>}
+      </Suspense>
     </div>
   )
 }
 
-export default Home
+type Props = {
+  queryReference : PreloadedQuery<indexPageQuery, Record<string, unknown>>
+}
+const Component = (props : Props) => {
+  const data = usePreloadedQuery<indexPageQuery>(
+    indexPageQueryGraphql,
+    props.queryReference,
+    {}
+  )
+  return (
+    <>
+      <p>usePreloadedQuery</p>
+      <h1>{data.repository?.name}</h1>
+      <h1>{data.repository?.description}</h1>
+      <h1>{data.repository?.owner.login}</h1>
+    </>
+  )
+
+}
+
+export default Index
