@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect"
 	todo "github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas"
 	"github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent"
@@ -28,6 +29,7 @@ func main() {
 
 	// Configure the server and start listening on :8081.
 	srv := handler.NewDefaultServer(todo.NewSchema(client))
+	srv.Use(entgql.Transactioner{TxOpener: client})
 	http.Handle("/",
 		playground.Handler("Todo", "/query"),
 	)
