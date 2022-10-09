@@ -9,6 +9,7 @@ input CreateTodoInput {
   createdAt: Time
   status: TodoStatus
   priority: Int
+  passwords: String!
   childIDs: [ID!]
   parentID: ID
 }
@@ -85,7 +86,26 @@ type Todo implements Node {
   createdAt: Time!
   status: TodoStatus!
   priority: Int!
-  children: [Todo!]
+  passwords: String!
+  children(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Todos returned from the connection."""
+    orderBy: TodoOrder
+
+    """Filtering options for Todos returned from the connection."""
+    where: TodoWhereInput
+  ): TodoConnection!
   parent: Todo
 }
 """A connection to a list of items."""
@@ -177,6 +197,20 @@ input TodoWhereInput {
   priorityGTE: Int
   priorityLT: Int
   priorityLTE: Int
+  """passwords field predicates"""
+  passwords: String
+  passwordsNEQ: String
+  passwordsIn: [String!]
+  passwordsNotIn: [String!]
+  passwordsGT: String
+  passwordsGTE: String
+  passwordsLT: String
+  passwordsLTE: String
+  passwordsContains: String
+  passwordsHasPrefix: String
+  passwordsHasSuffix: String
+  passwordsEqualFold: String
+  passwordsContainsFold: String
   """children edge predicates"""
   hasChildren: Boolean
   hasChildrenWith: [TodoWhereInput!]
@@ -192,6 +226,7 @@ input UpdateTodoInput {
   text: String
   status: TodoStatus
   priority: Int
+  passwords: String
   addChildIDs: [ID!]
   removeChildIDs: [ID!]
   clearParent: Boolean

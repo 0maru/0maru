@@ -39,13 +39,18 @@ func (Todo) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("PRIORITY"),
 			),
+		field.Text("password").NotEmpty().Annotations(entgql.Skip()),
+		field.Text("passwords").NotEmpty(),
 	}
 }
 
 // Edges of the Todo.
 func (Todo) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("parent", Todo.Type).Unique().From("children"),
+		edge.To("parent", Todo.Type).
+			Unique().
+			From("children").
+			Annotations(entgql.RelayConnection()),
 	}
 }
 

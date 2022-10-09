@@ -50,7 +50,7 @@ func (t *Todo) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     t.ID,
 		Type:   "Todo",
-		Fields: make([]*Field, 4),
+		Fields: make([]*Field, 5),
 		Edges:  make([]*Edge, 2),
 	}
 	var buf []byte
@@ -84,6 +84,14 @@ func (t *Todo) Node(ctx context.Context) (node *Node, err error) {
 	node.Fields[3] = &Field{
 		Type:  "int",
 		Name:  "priority",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(t.Passwords); err != nil {
+		return nil, err
+	}
+	node.Fields[4] = &Field{
+		Type:  "string",
+		Name:  "passwords",
 		Value: string(buf),
 	}
 	node.Edges[0] = &Edge{

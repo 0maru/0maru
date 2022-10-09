@@ -14,6 +14,7 @@ type CreateTodoInput struct {
 	CreatedAt *time.Time
 	Status    *todo.Status
 	Priority  *int
+	Passwords string
 	ChildIDs  []int
 	ParentID  *int
 }
@@ -30,6 +31,7 @@ func (i *CreateTodoInput) Mutate(m *TodoMutation) {
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
 	}
+	m.SetPasswords(i.Passwords)
 	if v := i.ChildIDs; len(v) > 0 {
 		m.AddChildIDs(v...)
 	}
@@ -49,6 +51,7 @@ type UpdateTodoInput struct {
 	Text           *string
 	Status         *todo.Status
 	Priority       *int
+	Passwords      *string
 	AddChildIDs    []int
 	RemoveChildIDs []int
 	ClearParent    bool
@@ -65,6 +68,9 @@ func (i *UpdateTodoInput) Mutate(m *TodoMutation) {
 	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
+	}
+	if v := i.Passwords; v != nil {
+		m.SetPasswords(*v)
 	}
 	if v := i.AddChildIDs; len(v) > 0 {
 		m.AddChildIDs(v...)

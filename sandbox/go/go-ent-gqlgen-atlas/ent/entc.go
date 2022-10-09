@@ -12,9 +12,9 @@ import (
 
 func main() {
 	ex, err := entgql.NewExtension(
-		entgql.WithSchemaGenerator(),
 		entgql.WithWhereInputs(true),
 		entgql.WithSchemaPath("ent.graphql"),
+		entgql.WithSchemaGenerator(),
 		entgql.WithConfigPath("gqlgen.yml"),
 	)
 	if err != nil {
@@ -22,6 +22,7 @@ func main() {
 	}
 	opts := []entc.Option{
 		entc.Extensions(ex),
+		entc.TemplateDir("./ent/template"),
 	}
 	if err := entc.Generate("./ent/schema", &gen.Config{}, opts...); err != nil {
 		log.Fatalf("running ent codegen: %v", err)

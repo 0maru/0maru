@@ -15,6 +15,8 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"IN_PROGRESS", "COMPLETED"}, Default: "IN_PROGRESS"},
 		{Name: "priority", Type: field.TypeInt, Default: 0},
+		{Name: "password", Type: field.TypeString, Size: 2147483647},
+		{Name: "passwords", Type: field.TypeString, Size: 2147483647},
 		{Name: "todo_parent", Type: field.TypeInt, Nullable: true},
 	}
 	// TodosTable holds the schema information for the "todos" table.
@@ -25,7 +27,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "todos_todos_parent",
-				Columns:    []*schema.Column{TodosColumns[5]},
+				Columns:    []*schema.Column{TodosColumns[7]},
 				RefColumns: []*schema.Column{TodosColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

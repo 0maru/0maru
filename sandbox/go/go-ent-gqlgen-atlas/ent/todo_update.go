@@ -68,6 +68,18 @@ func (tu *TodoUpdate) AddPriority(i int) *TodoUpdate {
 	return tu
 }
 
+// SetPassword sets the "password" field.
+func (tu *TodoUpdate) SetPassword(s string) *TodoUpdate {
+	tu.mutation.SetPassword(s)
+	return tu
+}
+
+// SetPasswords sets the "passwords" field.
+func (tu *TodoUpdate) SetPasswords(s string) *TodoUpdate {
+	tu.mutation.SetPasswords(s)
+	return tu
+}
+
 // AddChildIDs adds the "children" edge to the Todo entity by IDs.
 func (tu *TodoUpdate) AddChildIDs(ids ...int) *TodoUpdate {
 	tu.mutation.AddChildIDs(ids...)
@@ -206,6 +218,16 @@ func (tu *TodoUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Todo.status": %w`, err)}
 		}
 	}
+	if v, ok := tu.mutation.Password(); ok {
+		if err := todo.PasswordValidator(v); err != nil {
+			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "Todo.password": %w`, err)}
+		}
+	}
+	if v, ok := tu.mutation.Passwords(); ok {
+		if err := todo.PasswordsValidator(v); err != nil {
+			return &ValidationError{Name: "passwords", err: fmt.Errorf(`ent: validator failed for field "Todo.passwords": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -253,6 +275,20 @@ func (tu *TodoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: todo.FieldPriority,
+		})
+	}
+	if value, ok := tu.mutation.Password(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldPassword,
+		})
+	}
+	if value, ok := tu.mutation.Passwords(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldPasswords,
 		})
 	}
 	if tu.mutation.ChildrenCleared() {
@@ -401,6 +437,18 @@ func (tuo *TodoUpdateOne) SetNillablePriority(i *int) *TodoUpdateOne {
 // AddPriority adds i to the "priority" field.
 func (tuo *TodoUpdateOne) AddPriority(i int) *TodoUpdateOne {
 	tuo.mutation.AddPriority(i)
+	return tuo
+}
+
+// SetPassword sets the "password" field.
+func (tuo *TodoUpdateOne) SetPassword(s string) *TodoUpdateOne {
+	tuo.mutation.SetPassword(s)
+	return tuo
+}
+
+// SetPasswords sets the "passwords" field.
+func (tuo *TodoUpdateOne) SetPasswords(s string) *TodoUpdateOne {
+	tuo.mutation.SetPasswords(s)
 	return tuo
 }
 
@@ -555,6 +603,16 @@ func (tuo *TodoUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Todo.status": %w`, err)}
 		}
 	}
+	if v, ok := tuo.mutation.Password(); ok {
+		if err := todo.PasswordValidator(v); err != nil {
+			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "Todo.password": %w`, err)}
+		}
+	}
+	if v, ok := tuo.mutation.Passwords(); ok {
+		if err := todo.PasswordsValidator(v); err != nil {
+			return &ValidationError{Name: "passwords", err: fmt.Errorf(`ent: validator failed for field "Todo.passwords": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -619,6 +677,20 @@ func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) 
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: todo.FieldPriority,
+		})
+	}
+	if value, ok := tuo.mutation.Password(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldPassword,
+		})
+	}
+	if value, ok := tuo.mutation.Passwords(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldPasswords,
 		})
 	}
 	if tuo.mutation.ChildrenCleared() {

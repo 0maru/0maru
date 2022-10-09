@@ -38,6 +38,8 @@ type TodoMutation struct {
 	status          *todo.Status
 	priority        *int
 	addpriority     *int
+	password        *string
+	passwords       *string
 	clearedFields   map[string]struct{}
 	children        map[int]struct{}
 	removedchildren map[int]struct{}
@@ -311,6 +313,78 @@ func (m *TodoMutation) ResetPriority() {
 	m.addpriority = nil
 }
 
+// SetPassword sets the "password" field.
+func (m *TodoMutation) SetPassword(s string) {
+	m.password = &s
+}
+
+// Password returns the value of the "password" field in the mutation.
+func (m *TodoMutation) Password() (r string, exists bool) {
+	v := m.password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPassword returns the old "password" field's value of the Todo entity.
+// If the Todo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TodoMutation) OldPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPassword: %w", err)
+	}
+	return oldValue.Password, nil
+}
+
+// ResetPassword resets all changes to the "password" field.
+func (m *TodoMutation) ResetPassword() {
+	m.password = nil
+}
+
+// SetPasswords sets the "passwords" field.
+func (m *TodoMutation) SetPasswords(s string) {
+	m.passwords = &s
+}
+
+// Passwords returns the value of the "passwords" field in the mutation.
+func (m *TodoMutation) Passwords() (r string, exists bool) {
+	v := m.passwords
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPasswords returns the old "passwords" field's value of the Todo entity.
+// If the Todo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TodoMutation) OldPasswords(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPasswords is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPasswords requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPasswords: %w", err)
+	}
+	return oldValue.Passwords, nil
+}
+
+// ResetPasswords resets all changes to the "passwords" field.
+func (m *TodoMutation) ResetPasswords() {
+	m.passwords = nil
+}
+
 // AddChildIDs adds the "children" edge to the Todo entity by ids.
 func (m *TodoMutation) AddChildIDs(ids ...int) {
 	if m.children == nil {
@@ -423,7 +497,7 @@ func (m *TodoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TodoMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 6)
 	if m.text != nil {
 		fields = append(fields, todo.FieldText)
 	}
@@ -435,6 +509,12 @@ func (m *TodoMutation) Fields() []string {
 	}
 	if m.priority != nil {
 		fields = append(fields, todo.FieldPriority)
+	}
+	if m.password != nil {
+		fields = append(fields, todo.FieldPassword)
+	}
+	if m.passwords != nil {
+		fields = append(fields, todo.FieldPasswords)
 	}
 	return fields
 }
@@ -452,6 +532,10 @@ func (m *TodoMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case todo.FieldPriority:
 		return m.Priority()
+	case todo.FieldPassword:
+		return m.Password()
+	case todo.FieldPasswords:
+		return m.Passwords()
 	}
 	return nil, false
 }
@@ -469,6 +553,10 @@ func (m *TodoMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldStatus(ctx)
 	case todo.FieldPriority:
 		return m.OldPriority(ctx)
+	case todo.FieldPassword:
+		return m.OldPassword(ctx)
+	case todo.FieldPasswords:
+		return m.OldPasswords(ctx)
 	}
 	return nil, fmt.Errorf("unknown Todo field %s", name)
 }
@@ -505,6 +593,20 @@ func (m *TodoMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPriority(v)
+		return nil
+	case todo.FieldPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPassword(v)
+		return nil
+	case todo.FieldPasswords:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPasswords(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Todo field %s", name)
@@ -581,6 +683,12 @@ func (m *TodoMutation) ResetField(name string) error {
 		return nil
 	case todo.FieldPriority:
 		m.ResetPriority()
+		return nil
+	case todo.FieldPassword:
+		m.ResetPassword()
+		return nil
+	case todo.FieldPasswords:
+		m.ResetPasswords()
 		return nil
 	}
 	return fmt.Errorf("unknown Todo field %s", name)

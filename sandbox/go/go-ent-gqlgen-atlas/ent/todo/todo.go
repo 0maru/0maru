@@ -22,6 +22,10 @@ const (
 	FieldStatus = "status"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
+	// FieldPassword holds the string denoting the password field in the database.
+	FieldPassword = "password"
+	// FieldPasswords holds the string denoting the passwords field in the database.
+	FieldPasswords = "passwords"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
 	EdgeChildren = "children"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -45,6 +49,8 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldStatus,
 	FieldPriority,
+	FieldPassword,
+	FieldPasswords,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "todos"
@@ -75,6 +81,10 @@ var (
 	DefaultCreatedAt func() time.Time
 	// DefaultPriority holds the default value on creation for the "priority" field.
 	DefaultPriority int
+	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
+	PasswordValidator func(string) error
+	// PasswordsValidator is a validator for the "passwords" field. It is called by the builders before save.
+	PasswordsValidator func(string) error
 )
 
 // Status defines the type for the "status" enum field.

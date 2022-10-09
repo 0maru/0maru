@@ -5,9 +5,9 @@ package todo
 
 import (
 	"context"
-	"github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent/todo"
 
 	"github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent"
+	"github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent/todo"
 )
 
 // CreateTodo is the resolver for the createTodo field.

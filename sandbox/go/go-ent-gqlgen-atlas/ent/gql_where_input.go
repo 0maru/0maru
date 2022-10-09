@@ -69,6 +69,21 @@ type TodoWhereInput struct {
 	PriorityLT    *int  `json:"priorityLT,omitempty"`
 	PriorityLTE   *int  `json:"priorityLTE,omitempty"`
 
+	// "passwords" field predicates.
+	Passwords             *string  `json:"passwords,omitempty"`
+	PasswordsNEQ          *string  `json:"passwordsNEQ,omitempty"`
+	PasswordsIn           []string `json:"passwordsIn,omitempty"`
+	PasswordsNotIn        []string `json:"passwordsNotIn,omitempty"`
+	PasswordsGT           *string  `json:"passwordsGT,omitempty"`
+	PasswordsGTE          *string  `json:"passwordsGTE,omitempty"`
+	PasswordsLT           *string  `json:"passwordsLT,omitempty"`
+	PasswordsLTE          *string  `json:"passwordsLTE,omitempty"`
+	PasswordsContains     *string  `json:"passwordsContains,omitempty"`
+	PasswordsHasPrefix    *string  `json:"passwordsHasPrefix,omitempty"`
+	PasswordsHasSuffix    *string  `json:"passwordsHasSuffix,omitempty"`
+	PasswordsEqualFold    *string  `json:"passwordsEqualFold,omitempty"`
+	PasswordsContainsFold *string  `json:"passwordsContainsFold,omitempty"`
+
 	// "children" edge predicates.
 	HasChildren     *bool             `json:"hasChildren,omitempty"`
 	HasChildrenWith []*TodoWhereInput `json:"hasChildrenWith,omitempty"`
@@ -271,6 +286,45 @@ func (i *TodoWhereInput) P() (predicate.Todo, error) {
 	}
 	if i.PriorityLTE != nil {
 		predicates = append(predicates, todo.PriorityLTE(*i.PriorityLTE))
+	}
+	if i.Passwords != nil {
+		predicates = append(predicates, todo.PasswordsEQ(*i.Passwords))
+	}
+	if i.PasswordsNEQ != nil {
+		predicates = append(predicates, todo.PasswordsNEQ(*i.PasswordsNEQ))
+	}
+	if len(i.PasswordsIn) > 0 {
+		predicates = append(predicates, todo.PasswordsIn(i.PasswordsIn...))
+	}
+	if len(i.PasswordsNotIn) > 0 {
+		predicates = append(predicates, todo.PasswordsNotIn(i.PasswordsNotIn...))
+	}
+	if i.PasswordsGT != nil {
+		predicates = append(predicates, todo.PasswordsGT(*i.PasswordsGT))
+	}
+	if i.PasswordsGTE != nil {
+		predicates = append(predicates, todo.PasswordsGTE(*i.PasswordsGTE))
+	}
+	if i.PasswordsLT != nil {
+		predicates = append(predicates, todo.PasswordsLT(*i.PasswordsLT))
+	}
+	if i.PasswordsLTE != nil {
+		predicates = append(predicates, todo.PasswordsLTE(*i.PasswordsLTE))
+	}
+	if i.PasswordsContains != nil {
+		predicates = append(predicates, todo.PasswordsContains(*i.PasswordsContains))
+	}
+	if i.PasswordsHasPrefix != nil {
+		predicates = append(predicates, todo.PasswordsHasPrefix(*i.PasswordsHasPrefix))
+	}
+	if i.PasswordsHasSuffix != nil {
+		predicates = append(predicates, todo.PasswordsHasSuffix(*i.PasswordsHasSuffix))
+	}
+	if i.PasswordsEqualFold != nil {
+		predicates = append(predicates, todo.PasswordsEqualFold(*i.PasswordsEqualFold))
+	}
+	if i.PasswordsContainsFold != nil {
+		predicates = append(predicates, todo.PasswordsContainsFold(*i.PasswordsContainsFold))
 	}
 
 	if i.HasChildren != nil {

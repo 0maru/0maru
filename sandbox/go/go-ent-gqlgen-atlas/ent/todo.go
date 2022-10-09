@@ -24,6 +24,10 @@ type Todo struct {
 	Status todo.Status `json:"status,omitempty"`
 	// Priority holds the value of the "priority" field.
 	Priority int `json:"priority,omitempty"`
+	// Password holds the value of the "password" field.
+	Password string `json:"password,omitempty"`
+	// Passwords holds the value of the "passwords" field.
+	Passwords string `json:"passwords,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TodoQuery when eager-loading is set.
 	Edges       TodoEdges `json:"edges"`
@@ -74,7 +78,7 @@ func (*Todo) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case todo.FieldID, todo.FieldPriority:
 			values[i] = new(sql.NullInt64)
-		case todo.FieldText, todo.FieldStatus:
+		case todo.FieldText, todo.FieldStatus, todo.FieldPassword, todo.FieldPasswords:
 			values[i] = new(sql.NullString)
 		case todo.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
@@ -124,6 +128,18 @@ func (t *Todo) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
 				t.Priority = int(value.Int64)
+			}
+		case todo.FieldPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field password", values[i])
+			} else if value.Valid {
+				t.Password = value.String
+			}
+		case todo.FieldPasswords:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field passwords", values[i])
+			} else if value.Valid {
+				t.Passwords = value.String
 			}
 		case todo.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -181,6 +197,12 @@ func (t *Todo) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(fmt.Sprintf("%v", t.Priority))
+	builder.WriteString(", ")
+	builder.WriteString("password=")
+	builder.WriteString(t.Password)
+	builder.WriteString(", ")
+	builder.WriteString("passwords=")
+	builder.WriteString(t.Passwords)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -8,16 +8,25 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
-func (t *Todo) Children(ctx context.Context) (result []*Todo, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = t.NamedChildren(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = t.Edges.ChildrenOrErr()
+func (t *Todo) Children(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy *TodoOrder, where *TodoWhereInput,
+) (*TodoConnection, error) {
+	opts := []TodoPaginateOption{
+		WithTodoOrder(orderBy),
+		WithTodoFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = t.QueryChildren().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := t.Edges.totalCount[0][alias]
+	if nodes, err := t.NamedChildren(alias); err == nil || hasTotalCount {
+		pager, err := newTodoPager(opts)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TodoConnection{Edges: []*TodoEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return t.QueryChildren().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (t *Todo) Parent(ctx context.Context) (*Todo, error) {

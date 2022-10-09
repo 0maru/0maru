@@ -102,6 +102,20 @@ func Priority(v int) predicate.Todo {
 	})
 }
 
+// Password applies equality check predicate on the "password" field. It's identical to PasswordEQ.
+func Password(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPassword), v))
+	})
+}
+
+// Passwords applies equality check predicate on the "passwords" field. It's identical to PasswordsEQ.
+func Passwords(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPasswords), v))
+	})
+}
+
 // TextEQ applies the EQ predicate on the "text" field.
 func TextEQ(v string) predicate.Todo {
 	return predicate.Todo(func(s *sql.Selector) {
@@ -362,6 +376,204 @@ func PriorityLT(v int) predicate.Todo {
 func PriorityLTE(v int) predicate.Todo {
 	return predicate.Todo(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldPriority), v))
+	})
+}
+
+// PasswordEQ applies the EQ predicate on the "password" field.
+func PasswordEQ(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordNEQ applies the NEQ predicate on the "password" field.
+func PasswordNEQ(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordIn applies the In predicate on the "password" field.
+func PasswordIn(vs ...string) predicate.Todo {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldPassword), v...))
+	})
+}
+
+// PasswordNotIn applies the NotIn predicate on the "password" field.
+func PasswordNotIn(vs ...string) predicate.Todo {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldPassword), v...))
+	})
+}
+
+// PasswordGT applies the GT predicate on the "password" field.
+func PasswordGT(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordGTE applies the GTE predicate on the "password" field.
+func PasswordGTE(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordLT applies the LT predicate on the "password" field.
+func PasswordLT(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordLTE applies the LTE predicate on the "password" field.
+func PasswordLTE(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordContains applies the Contains predicate on the "password" field.
+func PasswordContains(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordHasPrefix applies the HasPrefix predicate on the "password" field.
+func PasswordHasPrefix(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordHasSuffix applies the HasSuffix predicate on the "password" field.
+func PasswordHasSuffix(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordEqualFold applies the EqualFold predicate on the "password" field.
+func PasswordEqualFold(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordContainsFold applies the ContainsFold predicate on the "password" field.
+func PasswordContainsFold(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordsEQ applies the EQ predicate on the "passwords" field.
+func PasswordsEQ(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsNEQ applies the NEQ predicate on the "passwords" field.
+func PasswordsNEQ(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsIn applies the In predicate on the "passwords" field.
+func PasswordsIn(vs ...string) predicate.Todo {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldPasswords), v...))
+	})
+}
+
+// PasswordsNotIn applies the NotIn predicate on the "passwords" field.
+func PasswordsNotIn(vs ...string) predicate.Todo {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldPasswords), v...))
+	})
+}
+
+// PasswordsGT applies the GT predicate on the "passwords" field.
+func PasswordsGT(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsGTE applies the GTE predicate on the "passwords" field.
+func PasswordsGTE(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsLT applies the LT predicate on the "passwords" field.
+func PasswordsLT(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsLTE applies the LTE predicate on the "passwords" field.
+func PasswordsLTE(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsContains applies the Contains predicate on the "passwords" field.
+func PasswordsContains(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsHasPrefix applies the HasPrefix predicate on the "passwords" field.
+func PasswordsHasPrefix(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsHasSuffix applies the HasSuffix predicate on the "passwords" field.
+func PasswordsHasSuffix(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsEqualFold applies the EqualFold predicate on the "passwords" field.
+func PasswordsEqualFold(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPasswords), v))
+	})
+}
+
+// PasswordsContainsFold applies the ContainsFold predicate on the "passwords" field.
+func PasswordsContainsFold(v string) predicate.Todo {
+	return predicate.Todo(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPasswords), v))
 	})
 }
 

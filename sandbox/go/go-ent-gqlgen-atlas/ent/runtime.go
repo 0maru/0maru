@@ -27,4 +27,12 @@ func init() {
 	todoDescPriority := todoFields[3].Descriptor()
 	// todo.DefaultPriority holds the default value on creation for the priority field.
 	todo.DefaultPriority = todoDescPriority.Default.(int)
+	// todoDescPassword is the schema descriptor for password field.
+	todoDescPassword := todoFields[4].Descriptor()
+	// todo.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
+	todo.PasswordValidator = todoDescPassword.Validators[0].(func(string) error)
+	// todoDescPasswords is the schema descriptor for passwords field.
+	todoDescPasswords := todoFields[5].Descriptor()
+	// todo.PasswordsValidator is a validator for the "passwords" field. It is called by the builders before save.
+	todo.PasswordsValidator = todoDescPasswords.Validators[0].(func(string) error)
 }

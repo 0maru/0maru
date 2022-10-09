@@ -68,6 +68,18 @@ func (tc *TodoCreate) SetNillablePriority(i *int) *TodoCreate {
 	return tc
 }
 
+// SetPassword sets the "password" field.
+func (tc *TodoCreate) SetPassword(s string) *TodoCreate {
+	tc.mutation.SetPassword(s)
+	return tc
+}
+
+// SetPasswords sets the "passwords" field.
+func (tc *TodoCreate) SetPasswords(s string) *TodoCreate {
+	tc.mutation.SetPasswords(s)
+	return tc
+}
+
 // AddChildIDs adds the "children" edge to the Todo entity by IDs.
 func (tc *TodoCreate) AddChildIDs(ids ...int) *TodoCreate {
 	tc.mutation.AddChildIDs(ids...)
@@ -217,6 +229,22 @@ func (tc *TodoCreate) check() error {
 	if _, ok := tc.mutation.Priority(); !ok {
 		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "Todo.priority"`)}
 	}
+	if _, ok := tc.mutation.Password(); !ok {
+		return &ValidationError{Name: "password", err: errors.New(`ent: missing required field "Todo.password"`)}
+	}
+	if v, ok := tc.mutation.Password(); ok {
+		if err := todo.PasswordValidator(v); err != nil {
+			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "Todo.password": %w`, err)}
+		}
+	}
+	if _, ok := tc.mutation.Passwords(); !ok {
+		return &ValidationError{Name: "passwords", err: errors.New(`ent: missing required field "Todo.passwords"`)}
+	}
+	if v, ok := tc.mutation.Passwords(); ok {
+		if err := todo.PasswordsValidator(v); err != nil {
+			return &ValidationError{Name: "passwords", err: fmt.Errorf(`ent: validator failed for field "Todo.passwords": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -275,6 +303,22 @@ func (tc *TodoCreate) createSpec() (*Todo, *sqlgraph.CreateSpec) {
 			Column: todo.FieldPriority,
 		})
 		_node.Priority = value
+	}
+	if value, ok := tc.mutation.Password(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldPassword,
+		})
+		_node.Password = value
+	}
+	if value, ok := tc.mutation.Passwords(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldPasswords,
+		})
+		_node.Passwords = value
 	}
 	if nodes := tc.mutation.ChildrenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
