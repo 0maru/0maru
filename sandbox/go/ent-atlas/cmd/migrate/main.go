@@ -13,6 +13,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// マイグレーションファイルを生成したいときは
+// go run -mod=mod cmd/migrate/main.go <name> を実行する
 func main() {
 	flag.Parse()
 	ctx := context.Background()
