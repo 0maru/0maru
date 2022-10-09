@@ -4,19 +4,19 @@ import (
 	"context"
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/entc/integration/migrate/versioned/migrate"
 	todo "github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas"
 	"github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent"
-	"github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent/migrate"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&cache=shared&_fk=1")
+	ds := "postgresql://postgres:pass@localhost:5432/test?sslmode=disable"
+	client, err := ent.Open(dialect.Postgres, ds)
 	if err != nil {
 		log.Fatal("opening ent client", err)
 	}
