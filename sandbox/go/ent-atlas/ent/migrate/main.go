@@ -4,15 +4,15 @@ package main
 
 import (
 	"context"
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql/schema"
 	"log"
 	"os"
 
 	"ent-atlas/ent/migrate"
 
 	atlas "ariga.io/atlas/sql/migrate"
-	_ "github.com/lib/pq"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql/schema"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
@@ -26,14 +26,15 @@ func main() {
 	opts := []schema.MigrateOption{
 		schema.WithDir(dir),                         // provide migration directory
 		schema.WithMigrationMode(schema.ModeReplay), // provide migration mode
-		schema.WithDialect(dialect.Postgres),        // Ent dialect to use
-		schema.WithFormatter(atlas.DefaultFormatter),
+		schema.WithDialect(dialect.MySQL),           // Ent dialect to use
 	}
 	if len(os.Args) != 2 {
 		log.Fatalln("migration name is required. Use: 'go run -mod=mod ent/migrate/main.go <name>'")
 	}
 	// Generate migrations using Atlas support for MySQL (note the Ent dialect option passed above).
-	err = migrate.NamedDiff(ctx, "postgresql://postgres:pass@localhost:5432/test2?sslmode=disable", os.Args[1], opts...)
+	//url := "postgresql://postgres:pass@localhost:5432/test3?sslmode=disable"
+	url := "mysql://root:pass@localhost:3306/test"
+	err = migrate.NamedDiff(ctx, url, os.Args[1], opts...)
 	if err != nil {
 		log.Fatalf("failed generating migration file: %v", err)
 	}

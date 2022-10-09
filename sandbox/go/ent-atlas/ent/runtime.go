@@ -4,6 +4,7 @@ package ent
 
 import (
 	"ent-atlas/ent/schema"
+	"ent-atlas/ent/task"
 	"ent-atlas/ent/user"
 )
 
@@ -11,6 +12,12 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescName is the schema descriptor for name field.
+	taskDescName := taskFields[0].Descriptor()
+	// task.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	task.NameValidator = taskDescName.Validators[0].(func(string) error)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.
