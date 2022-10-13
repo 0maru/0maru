@@ -1,6 +1,7 @@
 package main
 
 import (
+	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
 	"context"
 	"entgo.io/ent/dialect"
@@ -10,7 +11,7 @@ import (
 	"os"
 
 	migrate "ent-atlas/ent/migrate"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 // マイグレーションファイルを生成したいときは
@@ -24,14 +25,15 @@ func main() {
 	}
 	// Migrate diff options.
 	opts := []schema.MigrateOption{
-		schema.WithDir(dir),                          // provide migration directory
-		schema.WithMigrationMode(schema.ModeInspect), // provide migration mode
-		schema.WithDialect(dialect.MySQL),            // Ent dialect to use
+		schema.WithDir(dir),                         // provide migration directory
+		schema.WithMigrationMode(schema.ModeReplay), // provide migration mode
+		schema.WithDialect(dialect.Postgres),        // Ent dialect to use
+		schema.WithFormatter(atlas.DefaultFormatter),
 	}
 	if len(os.Args) != 2 {
 		log.Fatalln("migration name is required. Use: 'go run -mod=mod ent/migrate/main.go <name>'")
 	}
-	url := "mysql://root:pass@localhost:3306/test"
+	url := "postgresql://postgres:pass@localhost:54320/test?sslmode=disable"
 	err = migrate.NamedDiff(ctx, url, os.Args[1], opts...)
 	if err != nil {
 		log.Fatalf("failed generating migration file: %v", err)
