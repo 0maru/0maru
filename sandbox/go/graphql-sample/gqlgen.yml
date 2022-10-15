@@ -19,7 +19,7 @@ autobind:
 models:
   ID:
     model:
-      - github.com/99designs/gqlgen/graphql.IntID
+      - github.com/0maru/0maru/sandbox/go/graphql-sample/ent/schema/types.UUID
   Node:
     model:
       - github.com/0maru/0maru/sandbox/go/graphql-sample/ent.Noder

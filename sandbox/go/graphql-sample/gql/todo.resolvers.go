@@ -5,6 +5,7 @@ package gql
 
 import (
 	"context"
+
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent"
 )
 

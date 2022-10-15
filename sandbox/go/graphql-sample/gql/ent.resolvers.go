@@ -5,19 +5,20 @@ package gql
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent"
+	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
+	"github.com/google/uuid"
 )
 
 // Node is the resolver for the node field.
-func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
-	panic(fmt.Errorf("not implemented: Node - node"))
+func (r *queryResolver) Node(ctx context.Context, id uuid.UUID) (ent.Noder, error) {
+	return r.client.Noder(ctx, id, ent.WithFixedNodeType(todo.Table))
 }
 
 // Nodes is the resolver for the nodes field.
-func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
-	panic(fmt.Errorf("not implemented: Nodes - nodes"))
+func (r *queryResolver) Nodes(ctx context.Context, ids []uuid.UUID) ([]ent.Noder, error) {
+	return r.client.Noders(ctx, ids, ent.WithFixedNodeType(todo.Table))
 }
 
 // Todos is the resolver for the todos field.
