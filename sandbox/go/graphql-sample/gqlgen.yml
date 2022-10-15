@@ -1,6 +1,11 @@
 schema:
   - "*.graphql"
 
+exec:
+  filename: gql/generated.go
+  # Resolver と同じパッケージ名にする
+  package: gql
+
 resolver:
   layout: follow-schema
   dir: ./gql

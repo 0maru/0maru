@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 
-	graphql_sample "github.com/0maru/0maru/sandbox/go/graphql-sample"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent"
 )
 
@@ -26,7 +25,7 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*ent.Todo, error) {
 	panic(fmt.Errorf("not implemented: Todos - todos"))
 }
 
-// Query returns graphql_sample.QueryResolver implementation.
-func (r *Resolver) Query() graphql_sample.QueryResolver { return &queryResolver{r} }
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
