@@ -23,6 +23,8 @@ type TodoQuery struct {
 	order      []OrderFunc
 	fields     []string
 	predicates []predicate.Todo
+	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*Todo) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -249,6 +251,18 @@ func (tq *TodoQuery) Clone() *TodoQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		UUID uuid.UUID `json:"uuid,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Todo.Query().
+//		GroupBy(todo.FieldUUID).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (tq *TodoQuery) GroupBy(field string, fields ...string) *TodoGroupBy {
 	grbuild := &TodoGroupBy{config: tq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +279,16 @@ func (tq *TodoQuery) GroupBy(field string, fields ...string) *TodoGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		UUID uuid.UUID `json:"uuid,omitempty"`
+//	}
+//
+//	client.Todo.Query().
+//		Select(todo.FieldUUID).
+//		Scan(ctx, &v)
 func (tq *TodoQuery) Select(fields ...string) *TodoSelect {
 	tq.fields = append(tq.fields, fields...)
 	selbuild := &TodoSelect{TodoQuery: tq}
@@ -302,6 +326,9 @@ func (tq *TodoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Todo, e
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
+	if len(tq.modifiers) > 0 {
+		_spec.Modifiers = tq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -311,11 +338,19 @@ func (tq *TodoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Todo, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	for i := range tq.loadTotal {
+		if err := tq.loadTotal[i](ctx, nodes); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
 }
 
 func (tq *TodoQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := tq.querySpec()
+	if len(tq.modifiers) > 0 {
+		_spec.Modifiers = tq.modifiers
+	}
 	_spec.Node.Columns = tq.fields
 	if len(tq.fields) > 0 {
 		_spec.Unique = tq.unique != nil && *tq.unique

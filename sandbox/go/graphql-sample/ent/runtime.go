@@ -2,8 +2,34 @@
 
 package ent
 
+import (
+	"time"
+
+	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/schema"
+	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
+	"github.com/google/uuid"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	todoFields := schema.Todo{}.Fields()
+	_ = todoFields
+	// todoDescUUID is the schema descriptor for uuid field.
+	todoDescUUID := todoFields[0].Descriptor()
+	// todo.DefaultUUID holds the default value on creation for the uuid field.
+	todo.DefaultUUID = todoDescUUID.Default.(func() uuid.UUID)
+	// todoDescCompleted is the schema descriptor for completed field.
+	todoDescCompleted := todoFields[2].Descriptor()
+	// todo.DefaultCompleted holds the default value on creation for the completed field.
+	todo.DefaultCompleted = todoDescCompleted.Default.(bool)
+	// todoDescCreatedAt is the schema descriptor for created_at field.
+	todoDescCreatedAt := todoFields[3].Descriptor()
+	// todo.DefaultCreatedAt holds the default value on creation for the created_at field.
+	todo.DefaultCreatedAt = todoDescCreatedAt.Default.(func() time.Time)
+	// todoDescUpdatedAt is the schema descriptor for updated_at field.
+	todoDescUpdatedAt := todoFields[4].Descriptor()
+	// todo.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	todo.DefaultUpdatedAt = todoDescUpdatedAt.Default.(func() time.Time)
 }

@@ -6,12 +6,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/predicate"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
+	"github.com/google/uuid"
 )
 
 // TodoUpdate is the builder for updating Todo entities.
@@ -24,6 +26,68 @@ type TodoUpdate struct {
 // Where appends a list predicates to the TodoUpdate builder.
 func (tu *TodoUpdate) Where(ps ...predicate.Todo) *TodoUpdate {
 	tu.mutation.Where(ps...)
+	return tu
+}
+
+// SetUUID sets the "uuid" field.
+func (tu *TodoUpdate) SetUUID(u uuid.UUID) *TodoUpdate {
+	tu.mutation.SetUUID(u)
+	return tu
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (tu *TodoUpdate) SetNillableUUID(u *uuid.UUID) *TodoUpdate {
+	if u != nil {
+		tu.SetUUID(*u)
+	}
+	return tu
+}
+
+// SetDescription sets the "description" field.
+func (tu *TodoUpdate) SetDescription(s string) *TodoUpdate {
+	tu.mutation.SetDescription(s)
+	return tu
+}
+
+// SetCompleted sets the "completed" field.
+func (tu *TodoUpdate) SetCompleted(b bool) *TodoUpdate {
+	tu.mutation.SetCompleted(b)
+	return tu
+}
+
+// SetNillableCompleted sets the "completed" field if the given value is not nil.
+func (tu *TodoUpdate) SetNillableCompleted(b *bool) *TodoUpdate {
+	if b != nil {
+		tu.SetCompleted(*b)
+	}
+	return tu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tu *TodoUpdate) SetCreatedAt(t time.Time) *TodoUpdate {
+	tu.mutation.SetCreatedAt(t)
+	return tu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tu *TodoUpdate) SetNillableCreatedAt(t *time.Time) *TodoUpdate {
+	if t != nil {
+		tu.SetCreatedAt(*t)
+	}
+	return tu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tu *TodoUpdate) SetUpdatedAt(t time.Time) *TodoUpdate {
+	tu.mutation.SetUpdatedAt(t)
+	return tu
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tu *TodoUpdate) SetNillableUpdatedAt(t *time.Time) *TodoUpdate {
+	if t != nil {
+		tu.SetUpdatedAt(*t)
+	}
 	return tu
 }
 
@@ -104,6 +168,41 @@ func (tu *TodoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := tu.mutation.UUID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: todo.FieldUUID,
+		})
+	}
+	if value, ok := tu.mutation.Description(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldDescription,
+		})
+	}
+	if value, ok := tu.mutation.Completed(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: todo.FieldCompleted,
+		})
+	}
+	if value, ok := tu.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: todo.FieldCreatedAt,
+		})
+	}
+	if value, ok := tu.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: todo.FieldUpdatedAt,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{todo.Label}
@@ -121,6 +220,68 @@ type TodoUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *TodoMutation
+}
+
+// SetUUID sets the "uuid" field.
+func (tuo *TodoUpdateOne) SetUUID(u uuid.UUID) *TodoUpdateOne {
+	tuo.mutation.SetUUID(u)
+	return tuo
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (tuo *TodoUpdateOne) SetNillableUUID(u *uuid.UUID) *TodoUpdateOne {
+	if u != nil {
+		tuo.SetUUID(*u)
+	}
+	return tuo
+}
+
+// SetDescription sets the "description" field.
+func (tuo *TodoUpdateOne) SetDescription(s string) *TodoUpdateOne {
+	tuo.mutation.SetDescription(s)
+	return tuo
+}
+
+// SetCompleted sets the "completed" field.
+func (tuo *TodoUpdateOne) SetCompleted(b bool) *TodoUpdateOne {
+	tuo.mutation.SetCompleted(b)
+	return tuo
+}
+
+// SetNillableCompleted sets the "completed" field if the given value is not nil.
+func (tuo *TodoUpdateOne) SetNillableCompleted(b *bool) *TodoUpdateOne {
+	if b != nil {
+		tuo.SetCompleted(*b)
+	}
+	return tuo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tuo *TodoUpdateOne) SetCreatedAt(t time.Time) *TodoUpdateOne {
+	tuo.mutation.SetCreatedAt(t)
+	return tuo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tuo *TodoUpdateOne) SetNillableCreatedAt(t *time.Time) *TodoUpdateOne {
+	if t != nil {
+		tuo.SetCreatedAt(*t)
+	}
+	return tuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tuo *TodoUpdateOne) SetUpdatedAt(t time.Time) *TodoUpdateOne {
+	tuo.mutation.SetUpdatedAt(t)
+	return tuo
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tuo *TodoUpdateOne) SetNillableUpdatedAt(t *time.Time) *TodoUpdateOne {
+	if t != nil {
+		tuo.SetUpdatedAt(*t)
+	}
+	return tuo
 }
 
 // Mutation returns the TodoMutation object of the builder.
@@ -229,6 +390,41 @@ func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tuo.mutation.UUID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: todo.FieldUUID,
+		})
+	}
+	if value, ok := tuo.mutation.Description(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: todo.FieldDescription,
+		})
+	}
+	if value, ok := tuo.mutation.Completed(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: todo.FieldCompleted,
+		})
+	}
+	if value, ok := tuo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: todo.FieldCreatedAt,
+		})
+	}
+	if value, ok := tuo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: todo.FieldUpdatedAt,
+		})
 	}
 	_node = &Todo{config: tuo.config}
 	_spec.Assign = _node.assignValues
