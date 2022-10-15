@@ -1,0 +1,19 @@
+schema:
+  - "*.graphql"
+
+resolver:
+  layout: follow-schema
+  dir: ./gql
+  package: gql
+
+autobind:
+  - "github.com/0maru/0maru/sandbox/go/graphql-sample/ent"
+  - "github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
+
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.IntID
+  Node:
+    model:
+      - github.com/0maru/0maru/sandbox/go/graphql-sample/ent.Noder

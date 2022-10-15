@@ -11,7 +11,6 @@ import (
 
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/predicate"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
-	"github.com/google/uuid"
 
 	"entgo.io/ent"
 )
@@ -34,7 +33,6 @@ type TodoMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	uuid          *uuid.UUID
 	description   *string
 	completed     *bool
 	created_at    *time.Time
@@ -115,6 +113,12 @@ func (m TodoMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Todo entities.
+func (m *TodoMutation) SetID(id int) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
 func (m *TodoMutation) ID() (id int, exists bool) {
@@ -141,42 +145,6 @@ func (m *TodoMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetUUID sets the "uuid" field.
-func (m *TodoMutation) SetUUID(u uuid.UUID) {
-	m.uuid = &u
-}
-
-// UUID returns the value of the "uuid" field in the mutation.
-func (m *TodoMutation) UUID() (r uuid.UUID, exists bool) {
-	v := m.uuid
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUUID returns the old "uuid" field's value of the Todo entity.
-// If the Todo object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TodoMutation) OldUUID(ctx context.Context) (v uuid.UUID, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUUID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUUID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUUID: %w", err)
-	}
-	return oldValue.UUID, nil
-}
-
-// ResetUUID resets all changes to the "uuid" field.
-func (m *TodoMutation) ResetUUID() {
-	m.uuid = nil
 }
 
 // SetDescription sets the "description" field.
@@ -342,10 +310,7 @@ func (m *TodoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TodoMutation) Fields() []string {
-	fields := make([]string, 0, 5)
-	if m.uuid != nil {
-		fields = append(fields, todo.FieldUUID)
-	}
+	fields := make([]string, 0, 4)
 	if m.description != nil {
 		fields = append(fields, todo.FieldDescription)
 	}
@@ -366,8 +331,6 @@ func (m *TodoMutation) Fields() []string {
 // schema.
 func (m *TodoMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case todo.FieldUUID:
-		return m.UUID()
 	case todo.FieldDescription:
 		return m.Description()
 	case todo.FieldCompleted:
@@ -385,8 +348,6 @@ func (m *TodoMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *TodoMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case todo.FieldUUID:
-		return m.OldUUID(ctx)
 	case todo.FieldDescription:
 		return m.OldDescription(ctx)
 	case todo.FieldCompleted:
@@ -404,13 +365,6 @@ func (m *TodoMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *TodoMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case todo.FieldUUID:
-		v, ok := value.(uuid.UUID)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUUID(v)
-		return nil
 	case todo.FieldDescription:
 		v, ok := value.(string)
 		if !ok {
@@ -488,9 +442,6 @@ func (m *TodoMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *TodoMutation) ResetField(name string) error {
 	switch name {
-	case todo.FieldUUID:
-		m.ResetUUID()
-		return nil
 	case todo.FieldDescription:
 		m.ResetDescription()
 		return nil

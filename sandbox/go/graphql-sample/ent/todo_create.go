@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
-	"github.com/google/uuid"
 )
 
 // TodoCreate is the builder for creating a Todo entity.
@@ -19,20 +18,6 @@ type TodoCreate struct {
 	config
 	mutation *TodoMutation
 	hooks    []Hook
-}
-
-// SetUUID sets the "uuid" field.
-func (tc *TodoCreate) SetUUID(u uuid.UUID) *TodoCreate {
-	tc.mutation.SetUUID(u)
-	return tc
-}
-
-// SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (tc *TodoCreate) SetNillableUUID(u *uuid.UUID) *TodoCreate {
-	if u != nil {
-		tc.SetUUID(*u)
-	}
-	return tc
 }
 
 // SetDescription sets the "description" field.
@@ -80,6 +65,12 @@ func (tc *TodoCreate) SetNillableUpdatedAt(t *time.Time) *TodoCreate {
 	if t != nil {
 		tc.SetUpdatedAt(*t)
 	}
+	return tc
+}
+
+// SetID sets the "id" field.
+func (tc *TodoCreate) SetID(i int) *TodoCreate {
+	tc.mutation.SetID(i)
 	return tc
 }
 
@@ -160,10 +151,6 @@ func (tc *TodoCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (tc *TodoCreate) defaults() {
-	if _, ok := tc.mutation.UUID(); !ok {
-		v := todo.DefaultUUID()
-		tc.mutation.SetUUID(v)
-	}
 	if _, ok := tc.mutation.Completed(); !ok {
 		v := todo.DefaultCompleted
 		tc.mutation.SetCompleted(v)
@@ -180,9 +167,6 @@ func (tc *TodoCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (tc *TodoCreate) check() error {
-	if _, ok := tc.mutation.UUID(); !ok {
-		return &ValidationError{Name: "uuid", err: errors.New(`ent: missing required field "Todo.uuid"`)}
-	}
 	if _, ok := tc.mutation.Description(); !ok {
 		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "Todo.description"`)}
 	}
@@ -206,8 +190,10 @@ func (tc *TodoCreate) sqlSave(ctx context.Context) (*Todo, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	return _node, nil
 }
 
@@ -222,13 +208,9 @@ func (tc *TodoCreate) createSpec() (*Todo, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := tc.mutation.UUID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: todo.FieldUUID,
-		})
-		_node.UUID = value
+	if id, ok := tc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
 	}
 	if value, ok := tc.mutation.Description(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -306,7 +288,7 @@ func (tcb *TodoCreateBulk) Save(ctx context.Context) ([]*Todo, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}

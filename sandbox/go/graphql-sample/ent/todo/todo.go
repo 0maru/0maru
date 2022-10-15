@@ -4,8 +4,6 @@ package todo
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 const (
@@ -13,8 +11,6 @@ const (
 	Label = "todo"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldUUID holds the string denoting the uuid field in the database.
-	FieldUUID = "uuid"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldCompleted holds the string denoting the completed field in the database.
@@ -30,7 +26,6 @@ const (
 // Columns holds all SQL columns for todo fields.
 var Columns = []string{
 	FieldID,
-	FieldUUID,
 	FieldDescription,
 	FieldCompleted,
 	FieldCreatedAt,
@@ -48,8 +43,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultUUID holds the default value on creation for the "uuid" field.
-	DefaultUUID func() uuid.UUID
 	// DefaultCompleted holds the default value on creation for the "completed" field.
 	DefaultCompleted bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

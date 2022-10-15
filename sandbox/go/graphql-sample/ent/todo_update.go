@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/predicate"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
-	"github.com/google/uuid"
 )
 
 // TodoUpdate is the builder for updating Todo entities.
@@ -26,20 +25,6 @@ type TodoUpdate struct {
 // Where appends a list predicates to the TodoUpdate builder.
 func (tu *TodoUpdate) Where(ps ...predicate.Todo) *TodoUpdate {
 	tu.mutation.Where(ps...)
-	return tu
-}
-
-// SetUUID sets the "uuid" field.
-func (tu *TodoUpdate) SetUUID(u uuid.UUID) *TodoUpdate {
-	tu.mutation.SetUUID(u)
-	return tu
-}
-
-// SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (tu *TodoUpdate) SetNillableUUID(u *uuid.UUID) *TodoUpdate {
-	if u != nil {
-		tu.SetUUID(*u)
-	}
 	return tu
 }
 
@@ -168,13 +153,6 @@ func (tu *TodoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := tu.mutation.UUID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: todo.FieldUUID,
-		})
-	}
 	if value, ok := tu.mutation.Description(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -220,20 +198,6 @@ type TodoUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *TodoMutation
-}
-
-// SetUUID sets the "uuid" field.
-func (tuo *TodoUpdateOne) SetUUID(u uuid.UUID) *TodoUpdateOne {
-	tuo.mutation.SetUUID(u)
-	return tuo
-}
-
-// SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (tuo *TodoUpdateOne) SetNillableUUID(u *uuid.UUID) *TodoUpdateOne {
-	if u != nil {
-		tuo.SetUUID(*u)
-	}
-	return tuo
 }
 
 // SetDescription sets the "description" field.
@@ -390,13 +354,6 @@ func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) 
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := tuo.mutation.UUID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: todo.FieldUUID,
-		})
 	}
 	if value, ok := tuo.mutation.Description(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{

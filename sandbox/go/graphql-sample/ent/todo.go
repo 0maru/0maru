@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
-	"github.com/google/uuid"
 )
 
 // Todo is the model entity for the Todo schema.
@@ -17,8 +16,6 @@ type Todo struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// UUID holds the value of the "uuid" field.
-	UUID uuid.UUID `json:"uuid,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// Completed holds the value of the "completed" field.
@@ -42,8 +39,6 @@ func (*Todo) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case todo.FieldCreatedAt, todo.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case todo.FieldUUID:
-			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Todo", columns[i])
 		}
@@ -65,12 +60,6 @@ func (t *Todo) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			t.ID = int(value.Int64)
-		case todo.FieldUUID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field uuid", values[i])
-			} else if value != nil {
-				t.UUID = *value
-			}
 		case todo.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
@@ -123,9 +112,6 @@ func (t *Todo) String() string {
 	var builder strings.Builder
 	builder.WriteString("Todo(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
-	builder.WriteString("uuid=")
-	builder.WriteString(fmt.Sprintf("%v", t.UUID))
-	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(t.Description)
 	builder.WriteString(", ")

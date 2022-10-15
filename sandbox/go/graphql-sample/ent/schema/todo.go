@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 	"time"
 )
 
@@ -18,8 +17,7 @@ type Todo struct {
 // Fields of the Todo.
 func (Todo) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("uuid", uuid.UUID{}).
-			Default(uuid.New),
+		field.Int("id").Unique(),
 		field.Text("description"),
 		field.Bool("completed").
 			Default(false),

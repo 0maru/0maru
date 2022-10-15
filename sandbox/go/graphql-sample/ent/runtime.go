@@ -7,7 +7,6 @@ import (
 
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/schema"
 	"github.com/0maru/0maru/sandbox/go/graphql-sample/ent/todo"
-	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -16,10 +15,6 @@ import (
 func init() {
 	todoFields := schema.Todo{}.Fields()
 	_ = todoFields
-	// todoDescUUID is the schema descriptor for uuid field.
-	todoDescUUID := todoFields[0].Descriptor()
-	// todo.DefaultUUID holds the default value on creation for the uuid field.
-	todo.DefaultUUID = todoDescUUID.Default.(func() uuid.UUID)
 	// todoDescCompleted is the schema descriptor for completed field.
 	todoDescCompleted := todoFields[2].Descriptor()
 	// todo.DefaultCompleted holds the default value on creation for the completed field.

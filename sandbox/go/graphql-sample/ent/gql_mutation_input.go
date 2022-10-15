@@ -4,13 +4,10 @@ package ent
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // CreateTodoInput represents a mutation input for creating todos.
 type CreateTodoInput struct {
-	UUID        *uuid.UUID
 	Description string
 	Completed   *bool
 	CreatedAt   *time.Time
@@ -19,9 +16,6 @@ type CreateTodoInput struct {
 
 // Mutate applies the CreateTodoInput on the TodoMutation builder.
 func (i *CreateTodoInput) Mutate(m *TodoMutation) {
-	if v := i.UUID; v != nil {
-		m.SetUUID(*v)
-	}
 	m.SetDescription(i.Description)
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
@@ -42,7 +36,6 @@ func (c *TodoCreate) SetInput(i CreateTodoInput) *TodoCreate {
 
 // UpdateTodoInput represents a mutation input for updating todos.
 type UpdateTodoInput struct {
-	UUID        *uuid.UUID
 	Description *string
 	Completed   *bool
 	CreatedAt   *time.Time
@@ -51,9 +44,6 @@ type UpdateTodoInput struct {
 
 // Mutate applies the UpdateTodoInput on the TodoMutation builder.
 func (i *UpdateTodoInput) Mutate(m *TodoMutation) {
-	if v := i.UUID; v != nil {
-		m.SetUUID(*v)
-	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}

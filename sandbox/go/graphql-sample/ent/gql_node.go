@@ -50,22 +50,14 @@ func (t *Todo) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     t.ID,
 		Type:   "Todo",
-		Fields: make([]*Field, 5),
+		Fields: make([]*Field, 4),
 		Edges:  make([]*Edge, 0),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(t.UUID); err != nil {
-		return nil, err
-	}
-	node.Fields[0] = &Field{
-		Type:  "uuid.UUID",
-		Name:  "uuid",
-		Value: string(buf),
-	}
 	if buf, err = json.Marshal(t.Description); err != nil {
 		return nil, err
 	}
-	node.Fields[1] = &Field{
+	node.Fields[0] = &Field{
 		Type:  "string",
 		Name:  "description",
 		Value: string(buf),
@@ -73,7 +65,7 @@ func (t *Todo) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(t.Completed); err != nil {
 		return nil, err
 	}
-	node.Fields[2] = &Field{
+	node.Fields[1] = &Field{
 		Type:  "bool",
 		Name:  "completed",
 		Value: string(buf),
@@ -81,7 +73,7 @@ func (t *Todo) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(t.CreatedAt); err != nil {
 		return nil, err
 	}
-	node.Fields[3] = &Field{
+	node.Fields[2] = &Field{
 		Type:  "time.Time",
 		Name:  "created_at",
 		Value: string(buf),
@@ -89,7 +81,7 @@ func (t *Todo) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(t.UpdatedAt); err != nil {
 		return nil, err
 	}
-	node.Fields[4] = &Field{
+	node.Fields[3] = &Field{
 		Type:  "time.Time",
 		Name:  "updated_at",
 		Value: string(buf),
