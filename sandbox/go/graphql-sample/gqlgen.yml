@@ -1,5 +1,6 @@
 schema:
   - "*.graphql"
+  - "./gql/schema/*.graphql"
 
 exec:
   filename: gql/generated.go
