@@ -1,0 +1,2 @@
+g:
+	go generate .
