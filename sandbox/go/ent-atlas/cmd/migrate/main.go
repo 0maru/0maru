@@ -11,7 +11,7 @@ import (
 	"os"
 
 	migrate "ent-atlas/ent/migrate"
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // マイグレーションファイルを生成したいときは
@@ -27,13 +27,13 @@ func main() {
 	opts := []schema.MigrateOption{
 		schema.WithDir(dir),                         // provide migration directory
 		schema.WithMigrationMode(schema.ModeReplay), // provide migration mode
-		schema.WithDialect(dialect.Postgres),        // Ent dialect to use
+		schema.WithDialect(dialect.MySQL),        // Ent dialect to use
 		schema.WithFormatter(atlas.DefaultFormatter),
 	}
 	if len(os.Args) != 2 {
 		log.Fatalln("migration name is required. Use: 'go run -mod=mod ent/migrate/main.go <name>'")
 	}
-	url := "postgresql://postgres:pass@localhost:54320/test?sslmode=disable"
+	url := "mysql://root:pass@localhost:3306/test2"
 	err = migrate.NamedDiff(ctx, url, os.Args[1], opts...)
 	if err != nil {
 		log.Fatalf("failed generating migration file: %v", err)

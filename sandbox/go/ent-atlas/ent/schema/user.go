@@ -15,7 +15,7 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.Text("name").
 			NotEmpty(),
-		field.Int("age"),
+		field.Bool("age"),
 	}
 }
 

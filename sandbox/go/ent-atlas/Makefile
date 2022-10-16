@@ -1,7 +1,7 @@
 lint:
-	atlas migrate lint --dev-url="mysql://root:pass@localhost:3306/test" --dir="file://ent/migrate/migrations" --dir-format="golang-migrate" --latest=1
+	atlas migrate lint --dev-url="mysql://root:pass@localhost:3306/test2" --dir="file://ent/migrate/migrations" --dir-format="golang-migrate" --latest=1
 apply:
-	atlas migrate apply --dir "file://ent/migrate/migrations" --url "mysql://root:pass@localhost:3306/test"
+	atlas migrate apply --url "mysql://root:pass@localhost:3306/test2" --dir "file://ent/migrate/migrations"
 db_up:
-	docker run --name migration --rm -p 54320:5432 -e POSTGRES_PASSWORD=pass -e POSTGRES_DB=test -d postgres
+	docker run --name mysql_atlas --rm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=test2 -d mysql
 
