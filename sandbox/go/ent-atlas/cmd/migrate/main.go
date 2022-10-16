@@ -1,41 +1,51 @@
 package main
 
 import (
-	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
 	"context"
+	"ent-atlas/ent/migrate"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
-	"flag"
+	"entgo.io/ent/entc"
+	"entgo.io/ent/entc/gen"
 	"log"
 	"os"
 
-	migrate "ent-atlas/ent/migrate"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 // マイグレーションファイルを生成したいときは
 // go run -mod=mod cmd/migrate/main.go <name> を実行する
 func main() {
-	flag.Parse()
-	ctx := context.Background()
+	if len(os.Args) > 2 {
+		log.Fatal("no name given")
+	}
 	dir, err := sqltool.NewGolangMigrateDir("./ent/migrate/migrations")
 	if err != nil {
-		log.Fatalf("failed creating atlas migration directory: %v", err)
+		log.Fatalln("failed creating migration directory:", err)
 	}
-	// Migrate diff options.
-	opts := []schema.MigrateOption{
-		schema.WithDir(dir),                         // provide migration directory
-		schema.WithMigrationMode(schema.ModeReplay), // provide migration mode
-		schema.WithDialect(dialect.MySQL),        // Ent dialect to use
-		schema.WithFormatter(atlas.DefaultFormatter),
-	}
-	if len(os.Args) != 2 {
-		log.Fatalln("migration name is required. Use: 'go run -mod=mod ent/migrate/main.go <name>'")
-	}
-	url := "mysql://root:pass@localhost:3306/test2"
-	err = migrate.NamedDiff(ctx, url, os.Args[1], opts...)
+	graph, err := entc.LoadGraph("./ent/schema", &gen.Config{})
 	if err != nil {
-		log.Fatalf("failed generating migration file: %v", err)
+		log.Fatalln("failed loading schemas:", err)
+	}
+	tbls, err := graph.Tables()
+	if err != nil {
+		log.Fatalln("failed creating tables:", err)
+	}
+	drv, err := sql.Open(dialect.MySQL, "root:pass@tcp(localhost:3306)/test2")
+	if err != nil {
+		log.Fatalln("failed opening database:", err)
+	}
+	m, err := schema.NewMigrate(drv,
+		schema.WithDir(dir),
+		migrate.WithDropIndex(true),
+		migrate.WithDropColumn(true),
+	)
+	if err != nil {
+		log.Fatalln("failed creating migrate:", err)
+	}
+	if err := m.NamedDiff(context.Background(), os.Args[1], tbls...); err != nil {
+		log.Fatalln("failed creating migration:", err)
 	}
 }

@@ -1,2 +1,6 @@
-h1:6U33a9qRbWTeR5PooyaLZHl1SlWCtS379x6E4Yb+KfA=
+h1:s5N0Z/PXeOFIyVguJs+VYqwSPETBi18Bzl1ueAze/wc=
 20221016140622_init.sql h1:mi+y+nOdpTw34KQ4vZ69X7FcRYPHcG07QnOgR6yG4/s=
+20221016141649_update_user.down.sql h1:75yZ/4fCe8M9m+Z3kHydiEXeSKPSRnr3Qt6zkuPV0UE=
+20221016141649_update_user.up.sql h1:viSLhmz1dO2cocfcWWALQWYgiszCxMQV/QD2mCt3guY=
+20221016141808_drop_column.down.sql h1:oPsNmiaoEpZSPNUHk2SAPVQ/736zyqHmsqKnxmwdsQ0=
+20221016141808_drop_column.up.sql h1:d5wODMitkCJr9TGRk5+i8RW1MrYk6ytxdyPft7Yn8PM=
