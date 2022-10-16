@@ -18,6 +18,7 @@ type Todo struct {
 // Fields of the Todo.
 func (Todo) Fields() []ent.Field {
 	return []ent.Field{
+		// GraphQL のid で使うカラムをuuid にした場合はその他のtype でもid にuuid を使う必要がある
 		field.UUID("id", uuid.UUID{}).Default(uuid.New),
 		field.Text("description"),
 		field.Bool("completed").
