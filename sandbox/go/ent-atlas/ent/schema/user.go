@@ -16,6 +16,9 @@ func (User) Fields() []ent.Field {
 		field.Text("name").
 			NotEmpty(),
 		field.Int("number"),
+		// Sensitive をつけるとデコードされない
+		field.Text("password").
+			Sensitive(),
 	}
 }
 
