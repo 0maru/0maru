@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: container/api/Dockerfile
       # マルチステージビルドを考慮してローカル実行用にターゲットを指定する
       target: dev
     stdin_open: true
