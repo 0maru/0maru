@@ -1,0 +1,19 @@
+schema:
+  - ent.graphql
+  - todo.graphql
+
+resolver:
+  layout: follow-schema
+  dir: .
+
+autobind:
+  - github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent
+  - github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent/todo
+
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.IntID
+  Node:
+    model:
+      - github.com/0maru/0maru/sandbox/go/go-ent-gqlgen-atlas/ent.Noder

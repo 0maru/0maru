@@ -1,0 +1,11 @@
+version: '3.2'
+
+services:
+  api:
+    container_name: nestjs-distroless-sample
+    build:
+      context: ../
+      dockerfile: ./container/Dockerfile
+    ports:
+      - '8012:8012'
+
