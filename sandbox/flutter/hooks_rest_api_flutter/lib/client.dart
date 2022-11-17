@@ -1,22 +1,26 @@
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
+
+typedef InterceptorCallback = Request Function(Request request);
 
 class Client {
-  final _interceptors = <Function>[];
+  final _interceptors = <InterceptorCallback>[];
 
-  void addInterceptor(Function interceptor) {
+  void addInterceptor(InterceptorCallback interceptor) {
     _interceptors.add(interceptor);
   }
 
   void run() {
     for (var interceptor in _interceptors) {
-      interceptor();
+      interceptor(Request('method', Uri.parse('uri')));
     }
   }
 }
 
 void main() {
   final client = Client()
-    ..addInterceptor(() {
+    ..addInterceptor((request) {
       debugPrint('test');
+      return request;
     });
 }

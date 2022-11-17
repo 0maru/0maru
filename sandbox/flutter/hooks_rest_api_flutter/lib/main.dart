@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_rest_api_flutter/client.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,6 +32,8 @@ class MyHomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final packageInfo = usePackageInfo();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -35,22 +42,27 @@ class MyHomePage extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(packageInfo.data?.packageName ?? 'loading...'),
             TextButton(
               child: Text('run'),
-              onPressed: () {
-                final client = Client()
-                  ..addInterceptor(() {
-                    debugPrint('interceptor 1');
-                  })
-                  ..addInterceptor(() {
-                    debugPrint('interceptor ');
-                  });
-                client.run();
-              },
+              onPressed: () {},
             ),
           ],
         ),
       ),
     );
   }
+}
+
+AsyncSnapshot<PackageInfo> usePackageInfo() {
+  final packageInfo = useMemoized(
+    init,
+    ['packageInfo'],
+  );
+  return useFuture(packageInfo);
+}
+
+Future<PackageInfo> init() {
+  print('init');
+  return PackageInfo.fromPlatform();
 }

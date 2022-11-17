@@ -39,6 +39,8 @@ dependencies:
   isar: ^2.5.0
   http: ^0.13.5
   isar_flutter_libs: ^2.5.0
+  device_info_plus: ^4.0.0
+  package_info_plus: ^1.4.2
 
 dev_dependencies:
   flutter_test:
