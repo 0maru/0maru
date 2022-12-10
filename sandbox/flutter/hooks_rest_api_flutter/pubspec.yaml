@@ -37,6 +37,10 @@ dependencies:
   flutter_hooks: ^0.18.5+1
   hooks_riverpod: ^2.0.0-dev.9
   isar: ^2.5.0
+  http: ^0.13.5
+  isar_flutter_libs: ^2.5.0
+  device_info_plus: ^4.0.0
+  package_info_plus: ^1.4.2
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +52,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  isar_generator: ^2.5.0
+  build_runner: ^2.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
