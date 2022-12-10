@@ -49,6 +49,9 @@ func newTodoPaginateArgs(rv map[string]interface{}) *todoPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*TodoWhereInput); ok {
+		args.opts = append(args.opts, WithTodoFilter(v.Filter))
+	}
 	return args
 }
 

@@ -3,7 +3,7 @@ module github.com/0maru/0maru/sandbox/go/graphql-sample
 go 1.19
 
 require (
-	entgo.io/contrib v0.3.4-0.20221004133623-025fa6ad57a3
+	entgo.io/contrib v0.3.4-0.20221024164904-578ca1e25f54
 	entgo.io/ent v0.11.4-0.20221001062602-1029a2d3ba2a
 	github.com/99designs/gqlgen v0.17.20
 	github.com/google/uuid v1.3.0
