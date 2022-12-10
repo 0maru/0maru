@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@lexical/hashtag': ^0.7.0
   '@lexical/react': ^0.7.0
   '@types/node': 18.11.12
   '@types/react': 18.0.26
@@ -15,6 +16,7 @@ specifiers:
   yjs: ^13.5.43
 
 dependencies:
+  '@lexical/hashtag': 0.7.0_lexical@0.7.0
   '@lexical/react': 0.7.0_dbzhifg2tbcmezshmq5vugog7u
   '@types/node': 18.11.12
   '@types/react': 18.0.26

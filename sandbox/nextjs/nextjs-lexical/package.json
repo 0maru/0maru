@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3333",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@lexical/hashtag": "^0.7.0",
     "@lexical/react": "^0.7.0",
     "@types/node": "18.11.12",
     "@types/react": "18.0.26",
