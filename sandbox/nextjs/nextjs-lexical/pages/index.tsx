@@ -5,6 +5,12 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { $getRoot, $getSelection, LexicalEditor } from 'lexical';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
+import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import ToolbarPlugin from '../plugins/toolbarPlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { AutoLinkPlugin } from '@lexical/react/LexicalAutoLinkPlugin';
 
 const theme = {
     ltr: "ltr",
@@ -88,24 +94,39 @@ function onChange(editorState: any) {
     });
 }
 
-export default function Home() {
-    const initialConfig: InitialConfigType = {
-        namespace: 'MyEditor',
-        theme,
-        onError,
-    }
+const editorConfig: InitialConfigType = {
+    namespace: 'MyEditor',
+    theme,
+    onError,
+    nodes: [
+        HeadingNode,
+        QuoteNode,
+    ]
+}
 
+export default function Home() {
     return (
         <div>
             <p>inedx</p>
-            <LexicalComposer initialConfig={initialConfig}>
-                <PlainTextPlugin
-                    contentEditable={<ContentEditable className="editor-input"/>}
-                    placeholder={<p>ここに入力してください</p>}
-                    ErrorBoundary={LexicalErrorBoundary}
-                />
-                <HistoryPlugin/>
-            </LexicalComposer>
+            <Editor/>
         </div>
+    )
+}
+
+
+const Editor = () => {
+    return (
+        <LexicalComposer initialConfig={editorConfig}>
+            <div className="editor-container">
+                <ToolbarPlugin/>
+                <div className="editor-inner">
+                    <RichTextPlugin
+                        contentEditable={<ContentEditable className="editor-input"/>}
+                        placeholder={<p>placeholder</p>}
+                        ErrorBoundary={LexicalErrorBoundary}
+                    />
+                </div>
+            </div>
+        </LexicalComposer>
     )
 }
