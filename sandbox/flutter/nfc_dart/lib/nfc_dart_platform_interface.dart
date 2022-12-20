@@ -26,4 +26,12 @@ abstract class NfcDartPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<void> loadNFC() {
+    throw UnimplementedError('loadNFC() has not been implemented.');
+  }
+
+  Future<List<String>> loadCardReader() {
+    throw UnimplementedError('loadCardReader() has not been implemented.');
+  }
 }

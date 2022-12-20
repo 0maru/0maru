@@ -1,19 +1,52 @@
 import Cocoa
 import FlutterMacOS
+import CryptoTokenKit
 
 public class NfcDartPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "nfc_dart", binaryMessenger: registrar.messenger)
-    let instance = NfcDartPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
-    default:
-      result(FlutterMethodNotImplemented)
+    var manager: TKSmartCardSlotManager? = nil
+    
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "nfc_dart", binaryMessenger: registrar.messenger)
+        let instance = NfcDartPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
     }
-  }
+
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        print(call.method)
+        switch call.method {
+            case "getPlatformVersion":
+                result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
+            case "loadCardReader":
+                loadCardReader(result)
+            case "loadNFC":
+                loadNFC(result)
+            default:
+                result(FlutterMethodNotImplemented)
+        }
+    }
+    
+    public func loadCardReader(_ result: FlutterResult) {
+        print("start loadCardReader.")
+        manager = TKSmartCardSlotManager.default
+        let slotNames = manager?.slotNames
+        if slotNames == nil {
+            print("is null")
+            result([])
+            return
+        }
+        result(slotNames)
+    }
+    
+    public func loadNFC(_ result: FlutterResult) {
+        manager = TKSmartCardSlotManager.default
+        let slotNames = manager?.slotNames
+        if slotNames == nil {
+            print("is null")
+            return
+        }
+        for name in slotNames!.enumerated() {
+            print("\(name)")
+        }
+        result(nil)
+    }
 }

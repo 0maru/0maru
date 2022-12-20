@@ -1,15 +1,26 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nfc_dart/nfc_dart.dart';
-import 'package:nfc_dart/nfc_dart_platform_interface.dart';
 import 'package:nfc_dart/nfc_dart_method_channel.dart';
+import 'package:nfc_dart/nfc_dart_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockNfcDartPlatform
     with MockPlatformInterfaceMixin
     implements NfcDartPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<List<String>> loadCardReader() {
+    // TODO: implement loadCardReader
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> loadNFC() {
+    // TODO: implement loadNFC
+    throw UnimplementedError();
+  }
 }
 
 void main() {

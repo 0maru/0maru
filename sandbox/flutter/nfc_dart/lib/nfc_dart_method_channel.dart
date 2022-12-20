@@ -11,7 +11,23 @@ class MethodChannelNfcDart extends NfcDartPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
+  }
+
+  @override
+  Future<void> loadNFC() async {
+    await methodChannel.invokeMethod<void>('loadNFC');
+  }
+
+  @override
+  Future<List<String>> loadCardReader() async {
+    return await methodChannel.invokeMethod('loadCardReader').then((value) {
+      if (value == null) {
+        return [];
+      }
+      return (value as List<Object?>).map((e) => e as String).toList();
+    });
   }
 }
