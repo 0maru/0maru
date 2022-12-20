@@ -54,13 +54,13 @@ const supportedBlockTypes = new Set([
 
 const blockTypeToBlockName = {
     code: "Code Block",
-    h1: "Large Heading",
-    h2: "Small Heading",
-    h3: "Heading",
+    h1: "題名",
+    h2: "見出し",
+    h3: "小見出し",
     h4: "Heading",
     h5: "Heading",
     ol: "Numbered List",
-    paragraph: "Normal",
+    paragraph: "標準",
     quote: "Quote",
     ul: "Bulleted List"
 };
@@ -378,38 +378,23 @@ function BlockOptionsDropdownList({
         <div className="dropdown" ref={dropDownRef}>
             <button className="item" onClick={formatParagraph}>
                 <span className="icon paragraph"/>
-                <span className="text">Normal</span>
+                <span className="text">標準</span>
                 {blockType === "paragraph" && <span className="active"/>}
             </button>
             <button className="item" onClick={formatLargeHeading}>
                 <span className="icon large-heading"/>
-                <span className="text">Large Heading</span>
+                <span className="text">題名</span>
                 {blockType === "h1" && <span className="active"/>}
             </button>
             <button className="item" onClick={formatSmallHeading}>
                 <span className="icon small-heading"/>
-                <span className="text">Small Heading</span>
+                <span className="text">見出し</span>
                 {blockType === "h2" && <span className="active"/>}
             </button>
-            <button className="item" onClick={formatBulletList}>
-                <span className="icon bullet-list"/>
-                <span className="text">Bullet List</span>
-                {blockType === "ul" && <span className="active"/>}
-            </button>
-            <button className="item" onClick={formatNumberedList}>
-                <span className="icon numbered-list"/>
-                <span className="text">Numbered List</span>
-                {blockType === "ol" && <span className="active"/>}
-            </button>
-            <button className="item" onClick={formatQuote}>
-                <span className="icon quote"/>
-                <span className="text">Quote</span>
-                {blockType === "quote" && <span className="active"/>}
-            </button>
-            <button className="item" onClick={formatCode}>
-                <span className="icon code"/>
-                <span className="text">Code Block</span>
-                {blockType === "code" && <span className="active"/>}
+            <button className="item" onClick={formatSmallHeading}>
+                <span className="icon small-heading"/>
+                <span className="text">小見出し</span>
+                {blockType === "h3" && <span className="active"/>}
             </button>
         </div>
     );
@@ -569,8 +554,7 @@ export default function ToolbarPlugin() {
                         aria-label="Formatting Options"
                     >
                         <span className={"icon block-type " + blockType}/>
-                        <span className="text">{blockTypeToBlockName[blockType]}</span>
-                        <i className="chevron-down"/>
+                        <span className="text">{blockTypeToBlockName[blockType]}↓</span>
                     </button>
                     {showBlockOptionsDropDown &&
                         createPortal(
