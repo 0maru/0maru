@@ -3,7 +3,7 @@ import FlutterMacOS
 import CryptoTokenKit
 
 public class NfcDartPlugin: NSObject, FlutterPlugin {
-    var manager: TKSmartCardSlotManager? = nil
+    let manager = TKSmartCardSlotManager.default
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "nfc_dart", binaryMessenger: registrar.messenger)
@@ -27,7 +27,6 @@ public class NfcDartPlugin: NSObject, FlutterPlugin {
     
     public func loadCardReader(_ result: FlutterResult) {
         print("start loadCardReader.")
-        manager = TKSmartCardSlotManager.default
         let slotNames = manager?.slotNames
         if slotNames == nil {
             print("is null")
@@ -38,7 +37,6 @@ public class NfcDartPlugin: NSObject, FlutterPlugin {
     }
     
     public func loadNFC(_ result: FlutterResult) {
-        manager = TKSmartCardSlotManager.default
         let slotNames = manager?.slotNames
         if slotNames == nil {
             print("is null")
