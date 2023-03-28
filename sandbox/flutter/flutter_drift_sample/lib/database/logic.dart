@@ -2,9 +2,11 @@ import 'package:drift/drift.dart';
 import 'package:flutter_drift_sample/database/schema.dart';
 import 'package:flutter_drift_sample/main.dart';
 
-Future<void> insertTodo() async {
+Future<void> insertTodo(int count) async {
+  print('start insertTodo: ${count} --- ${DateTime.now()}');
+  // API通信をシミュレート
+  await Future.delayed(const Duration(seconds: 1));
   await database.batch((batch) {
-    print('start insertTodo: ${DateTime.now()}');
     batch.insertAllOnConflictUpdate(
       database.todos,
       [
@@ -16,13 +18,16 @@ Future<void> insertTodo() async {
           ),
       ],
     );
-    print('end insertTodo: ${DateTime.now()}');
+    print('[insertTodo]batch insert complete ${DateTime.now()}');
   });
+  print('end insertTodo: ${DateTime.now()}');
 }
 
-Future<void> insertCategory() async {
+Future<void> insertCategory(int count) async {
+  print('start insertCategory: ${count} ---  ${DateTime.now()}');
+  // API通信をシミュレート
+  await Future.delayed(const Duration(milliseconds: 100));
   await database.batch((batch) {
-    print('start insertCategory: ${DateTime.now()}');
     batch.insertAllOnConflictUpdate(
       database.categories,
       [
@@ -32,6 +37,7 @@ Future<void> insertCategory() async {
           ),
       ],
     );
-    print('end insertCategory: ${DateTime.now()}');
+    print('[insertCategory]batch insert complete ${DateTime.now()}');
   });
+  print('end insertCategory: ${DateTime.now()}');
 }
