@@ -57,8 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _incrementCounter() async {
     for (var i = 0; i < 10; i++) {
       await Future.wait([
-        insertTodo(),
-        insertCategory(),
+        insertTodo(i),
+        insertCategory(i),
       ]);
     }
   }
