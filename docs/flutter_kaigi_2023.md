@@ -69,3 +69,44 @@ PR毎では問題が多い
 テストは大切だが、プロダクトやチームに合わせて柔軟に変更する
 インテグレーションテストは負荷が高いが、便利なツールはある
 
+##  出前館におけるFlutterの現在とこれから
+
+出前館 / 前田さん（@）
+チーム規模アプリエンジニア２０人
+
+
+## Dart Frog x melos
+
+YUMEMI / もぐもぐ、k9i
+
+### Dart Frog
+
+shelf をラップしたFW
+Provider というmiddleware が使える
+
+### 使ってみて
+
+BFF 程度ならなんとでもなる
+
+## Dart でコード生成
+
+## Flutter で構築する漫画ビューア
+
+excite
+
+EdgeToEdge で時計とかを消す
+自動通知は出来ないのでinitState でSystemChrome で検知する
+
+SystemUiMode.immersiveSticky がおすすめ
+いい感じに消えたりしてくれる
+
+isolate.run で画像描画の効率化
+
+## なぜわれわれはRiverpod を使うのか
+
+ちゅーやん
+
+### autoDispose
+
+依存されえれいないかはリビルドごとに判定される
+Riverpod は問題を解決するために作られているので乗っかって使いうといいよね
